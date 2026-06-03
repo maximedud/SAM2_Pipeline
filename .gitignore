@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.pyc
+
+# Virtual environments
+.venv/
+venv/
+
+# IDE
+.idea/
+.vscode/
+
+# Videos
+*.mp4
+*.avi
+*.mov
+*.m4a
+
+data/input/*
+!data/input/.gitkeep
+
+# SAM checkpoints
+*.pt
+*.pth
+
+# Outputs
+outputs/*
+annotations/*.json
+
+# Keep folders
+!outputs/.gitkeep
+!annotations/.gitkeep
+
+# OS
+.DS_Store
+Thumbs.db
+
+external/
+.Rhistory
+*.zip
+__pycache__/
+*.pyc

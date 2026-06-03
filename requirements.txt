@@ -1,0 +1,8 @@
+numpy
+opencv-python
+torch
+torchvision
+pandas
+matplotlib
+pyyaml
+tqdm
