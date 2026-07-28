@@ -1,0 +1,1 @@
+Download the official SAM2 checkpoint and place it here.

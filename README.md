@@ -1,108 +1,249 @@
-# SAM2 Demo Pipeline
+# SAM2 Video Segmentation Pipeline
 
-## Description
+Pipeline developed during my internship at **INRIA STARS** for the segmentation and reconstruction of participant videos using **Segment Anything Model 2 (SAM2)**.
 
-This project demonstrates a video segmentation pipeline based on SAM 2 (Segment Anything Model 2).
-
-The workflow is divided into two steps:
-
-1. Manual annotation and prompt creation
-2. Video propagation and export
-
-Outputs include:
-
-- segmented video
-- CSV file
-- contour extraction
-- preview images
+The objective of this project is to reconstruct an annotated participant video by combining static image segmentation and dynamic video propagation.
 
 ---
 
-## Project structure
+# Overview
 
-SAM2_demo/
+The pipeline processes a participant recording through six successive stages:
 
-scripts/
-- annotation_sam_preview.py
-- propagation_cuda.py
-
-checkpoints/
-- sam2.1_hiera_small.pt
-
-data/input/
-- video_without_cut.mp4
-
-annotations/
-
-outputs/
-
----
-
-## Installation
-
-Create a Python environment:
-
-python -m venv .venv
-
-Activate environment:
-
-Windows:
-.venv\Scripts\activate
-
-Linux:
-source .venv/bin/activate
-
-Install dependencies:
-
-pip install -r requirements.txt
+```
+Original participant video
+            │
+            ▼
+1. Exploration & Extraction
+            │
+            ▼
+2. Dataset Index Generation
+            │
+            ▼
+3. Interactive Annotation
+            │
+     ┌──────┴──────┐
+     ▼             ▼
+4. Static      5. Dynamic
+ Segmentation     Propagation
+     │             │
+     └──────┬──────┘
+            ▼
+6. Video Reconstruction
+            │
+            ▼
+Final annotated participant video
+```
 
 ---
 
-## Script 1: Annotation
+# Repository Structure
 
-Run:
+```
+SAM2_Pipeline/
 
-python scripts/annotation_sam_preview.py
+├── README.md
+├── requirements.txt
+├── .gitignore
+│
+├── scripts/
+│   ├── exploration_extraction.py
+│   ├── create_dataset_index.py
+│   ├── annotation_batch_subvideos.py
+│   ├── segment_static_subvideos.py
+│   ├── propagation_subvid.py
+│   └── reconstruct_video.py
+│
+└── data/
+    └── input_videos/
+```
 
-Controls:
-
-q : previous frame
-d : next frame
-b : -25 frames
-f : +25 frames
-
-Left click : positive point
-Right click : negative point
-
-s : save annotations
-u : remove last point
-r : reset current frame annotations
-
-ESC : quit
-
-Output:
-
-annotations/annotations_*.json
+All remaining directories are automatically created during execution.
 
 ---
 
-## Script 2: Propagation
+# Input Data
 
-Run:
+Before running the pipeline, place the original **Participant 6** video in:
 
-python scripts/propagation_cuda.py
+```
+data/input_videos/
+```
+
+---
+
+# Pipeline Description
+
+## 1. exploration_extraction.py
+
+Extracts all static and dynamic subvideos from the original participant recording.
 
 Outputs:
 
-- segmented video
-- CSV file
-- contour JSON
-- preview images
+- extracted frames
+- extracted subvideos
+- `index.json`
 
 ---
 
-## Notes
+## 2. create_dataset_index.py
 
-This project combines official SAM 2 functionalities with custom Python developments built for experimentation and rapid prototyping.
+Creates the experiment timeline (`dataset_index.ods`) from the extraction index.
 
-Some components were developed with the assistance of AI in order to quickly obtain functional results and overcome development issues encountered during the project.
+The generated dataset contains:
+
+- participant
+- segment name
+- task
+- segment type
+- global frame interval
+
+---
+
+## 3. annotation_batch_subvideos.py
+
+Interactive annotation tool based on SAM2.
+
+Main features:
+
+- multi-object annotation
+- positive and negative clicks
+- multiple annotated frames
+- annotation editing
+- JSON export
+
+Outputs:
+
+```
+annotations/
+```
+
+---
+
+## 4. segment_static_subvideos.py
+
+Segments all static experimental screens from the generated annotations.
+
+Outputs:
+
+```
+static_segmentations/
+```
+
+---
+
+## 5. propagation_subvid.py
+
+Propagates the annotated masks through each dynamic subvideo using SAM2 Video Predictor.
+
+Outputs:
+
+```
+propagations/
+```
+
+---
+
+## 6. reconstruct_video.py
+
+Reconstructs the complete participant video by combining:
+
+- propagated dynamic overlays
+- segmented static overlays
+- original frames outside annotated segments
+
+Outputs:
+
+```
+reconstruction/
+```
+
+---
+
+# Usage
+
+Run the scripts in the following order:
+
+```
+exploration_extraction.py
+
+↓
+
+create_dataset_index.py
+
+↓
+
+annotation_batch_subvideos.py
+
+↓
+
+segment_static_subvideos.py
+
+↓
+
+propagation_subvid.py
+
+↓
+
+reconstruct_video.py
+```
+
+---
+
+# Requirements
+
+- Python 3.10
+- PyTorch
+- OpenCV
+- NumPy
+- Pandas
+- ODFPy
+- SAM2
+
+Install the required packages:
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+# Notes
+
+This repository contains the complete pipeline developed during the internship.
+
+The annotation stage is **interactive** and requires manual user input before segmentation and propagation.
+
+Intermediate files and output directories are automatically generated during execution and are intentionally excluded from version control.
+
+---
+
+# Current Features
+
+- Interactive SAM2 annotation
+- Multi-object support
+- Multi-frame annotations
+- Static image segmentation
+- Dynamic video propagation
+- Automatic participant video reconstruction
+- Consistent segment naming
+- Automatic metadata generation
+
+---
+
+# Future Work
+
+- Eye-tracking overlay integration
+- Pipeline automation for multiple participants
+- Improved visualization tools
+- SAM 3.x integration
+
+---
+
+# Author
+
+**Maxime Durand**
+
+Master's Internship – INRIA STARS
+
+2026
