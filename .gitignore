@@ -1,3 +1,4 @@
+
 # =====================================================
 # Python
 # =====================================================
@@ -5,6 +6,7 @@
 __pycache__/
 *.py[cod]
 *.so
+.pytest_cache/
 
 # =====================================================
 # Virtual environments
@@ -36,36 +38,59 @@ Thumbs.db
 .RData
 
 # =====================================================
-# Input videos
-# Keep the folder but ignore its contents
+# Original videos and extracted frames
 # =====================================================
 
-data/input_videos/*
-!data/input_videos/.gitkeep
-
-# =====================================================
-# Generated data
-# =====================================================
-
+data/input/
+data/input_videos/
 data/input_frames/
+data/input_frames_*/
+
+# =====================================================
+# Annotations and generated segmentations
+# =====================================================
+
+data/annotations/
 data/subvideos/
 data/static_segmentations/
 data/propagations/
 data/reconstruction/
 
-annotations/
+# =====================================================
+# Dataset indexes (generated or private)
+# =====================================================
+
+data/dataset_index.ods
+data/dataset_index*.ods
+
+# =====================================================
+# MASC / Tobii participant data and results
+# =====================================================
+
+MASC/data/
+MASC/derived/
+DatasetRed/
+
+# =====================================================
+# Model checkpoints
+# =====================================================
+
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+
+# =====================================================
+# Generated outputs
+# =====================================================
 
 outputs/
+annotations/
 
 # =====================================================
-# Models
-# =====================================================
-
-checkpoints/*.pt
-checkpoints/*.pth
-
-# =====================================================
-# Misc
+# Logs and temporary files
 # =====================================================
 
 *.log
+*.tmp
+*.bak
