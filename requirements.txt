@@ -6,3 +6,4 @@ pandas
 matplotlib
 pyyaml
 tqdm
+odfpy
